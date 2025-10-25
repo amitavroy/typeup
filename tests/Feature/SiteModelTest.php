@@ -13,6 +13,7 @@ test('site has fillable properties', function () {
         'name',
         'domain',
         'site_key',
+        'server_token',
     ]);
 });
 
@@ -51,14 +52,14 @@ test('site can be created with mass assignment', function () {
 test('site domain must be unique', function () {
     Site::factory()->create(['domain' => 'example.com']);
 
-    expect(fn () => Site::factory()->create(['domain' => 'example.com']))
+    expect(fn() => Site::factory()->create(['domain' => 'example.com']))
         ->toThrow(QueryException::class);
 });
 
 test('site site_key must be unique', function () {
     Site::factory()->create(['site_key' => 'unique-key']);
 
-    expect(fn () => Site::factory()->create(['site_key' => 'unique-key']))
+    expect(fn() => Site::factory()->create(['site_key' => 'unique-key']))
         ->toThrow(QueryException::class);
 });
 
@@ -81,4 +82,27 @@ test('site uses timestamps', function () {
 
     expect($site->created_at)->toBeInstanceOf(DateTime::class)
         ->and($site->updated_at)->toBeInstanceOf(DateTime::class);
+});
+
+test('site hides server_token from serialization', function () {
+    $site = Site::factory()->create([
+        'server_token' => 'secret-token-123',
+    ]);
+
+    // Server token should be accessible directly
+    expect($site->server_token)->toBe('secret-token-123');
+
+    // Server token should be hidden from array serialization
+    $array = $site->toArray();
+    expect($array)->not->toHaveKey('server_token');
+    expect($array)->toHaveKey('name');
+    expect($array)->toHaveKey('domain');
+    expect($array)->toHaveKey('site_key');
+
+    // Server token should be hidden from JSON serialization
+    $json = json_encode($site);
+    expect($json)->not->toContain('server_token');
+    expect($json)->toContain('name');
+    expect($json)->toContain('domain');
+    expect($json)->toContain('site_key');
 });

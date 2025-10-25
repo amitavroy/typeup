@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sites', function (Blueprint $table) {
+        Schema::create('searches', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('domain')->unique();
-            $table->string('site_key')->unique();
-            $table->string('server_token')->unique()->nullable();
+            $table->foreignId('site_id')->constrained()->onDelete('cascade');
+            $table->uuid('search_id')->unique();
+            $table->json('metadata')->nullable();
             $table->timestamps();
 
-            $table->index('site_key');
+            $table->index(['site_id', 'created_at']);
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sites');
+        Schema::dropIfExists('searches');
     }
 };
