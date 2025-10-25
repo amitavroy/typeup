@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\SiteController;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SiteController;
 
 Route::get('/', function () {
     return Inertia::render('welcome', [
