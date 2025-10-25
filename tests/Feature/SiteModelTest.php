@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 test('site has fillable properties', function () {
-    $site = new Site();
+    $site = new Site;
 
     expect($site->getFillable())->toBe([
         'name',
@@ -17,7 +17,7 @@ test('site has fillable properties', function () {
 });
 
 test('site has correct table name', function () {
-    $site = new Site();
+    $site = new Site;
 
     expect($site->getTable())->toBe('sites');
 });
@@ -51,14 +51,14 @@ test('site can be created with mass assignment', function () {
 test('site domain must be unique', function () {
     Site::factory()->create(['domain' => 'example.com']);
 
-    expect(fn() => Site::factory()->create(['domain' => 'example.com']))
+    expect(fn () => Site::factory()->create(['domain' => 'example.com']))
         ->toThrow(QueryException::class);
 });
 
 test('site site_key must be unique', function () {
     Site::factory()->create(['site_key' => 'unique-key']);
 
-    expect(fn() => Site::factory()->create(['site_key' => 'unique-key']))
+    expect(fn () => Site::factory()->create(['site_key' => 'unique-key']))
         ->toThrow(QueryException::class);
 });
 
