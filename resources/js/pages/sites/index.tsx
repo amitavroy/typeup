@@ -1,8 +1,13 @@
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
-import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { PaginatedData, Site, type BreadcrumbItem } from '@/types';
+import { Head, router } from '@inertiajs/react';
+import { PlusIcon } from 'lucide-react';
+import Heading from '../../components/heading';
+import Pagination from '../../components/pagination';
 import SitesTable from '../../components/tables/sites-table';
+import { Button } from '../../components/ui/button';
+import siteRoutes from '../../routes/sites';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -11,31 +16,37 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
   {
     title: 'Sites',
-    href: '/sites',
+    href: siteRoutes.index().url,
   },
 ];
 
-export default function SitesIndex() {
+interface SitesIndexPageProps {
+  sites: PaginatedData<Site>;
+}
+
+export default function SitesIndexPage({ sites }: SitesIndexPageProps) {
+  const goToAddSitePage = () => {
+    router.visit(siteRoutes.create().url);
+  };
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Sites" />
       <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-              Sites
-            </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Manage your websites
-            </p>
-          </div>
+        <Heading title="Sites" description="Manage your websites" />
+
+        <div className="flex w-full justify-end">
+          <Button onClick={goToAddSitePage}>
+            <PlusIcon />
+            Add Site
+          </Button>
         </div>
 
-        <div className="flex-1 rounded-xl border border-sidebar-border/70 bg-white dark:border-sidebar-border dark:bg-gray-800">
+        <div className="rounded-xl border border-sidebar-border/70 bg-white dark:border-sidebar-border dark:bg-gray-800">
           <div className="py-6">
-            <SitesTable />
+            <SitesTable sites={sites} />
           </div>
         </div>
+        <Pagination links={sites.links} />
       </div>
     </AppLayout>
   );

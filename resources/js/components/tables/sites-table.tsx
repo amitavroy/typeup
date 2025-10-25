@@ -1,3 +1,7 @@
+import { router } from '@inertiajs/react';
+import { formatDate } from '../../lib/utils';
+import siteRoutes from '../../routes/sites';
+import { PaginatedData, Site } from '../../types';
 import {
   Table,
   TableCell,
@@ -6,7 +10,11 @@ import {
   TableRow,
 } from '../ui/table';
 
-export default function SitesTable() {
+interface SitesTableProps {
+  sites: PaginatedData<Site>;
+}
+
+export default function SitesTable({ sites }: SitesTableProps) {
   return (
     <Table>
       <TableHeader>
@@ -17,13 +25,19 @@ export default function SitesTable() {
           <TableHead>Site Key</TableHead>
           <TableHead>Created At</TableHead>
         </TableRow>
-        <TableRow>
-          <TableCell>1</TableCell>
-          <TableCell>Site 1</TableCell>
-          <TableCell>https://site1.com</TableCell>
-          <TableCell>site1</TableCell>
-          <TableCell>2021-01-01</TableCell>
-        </TableRow>
+        {sites.data.map((site) => (
+          <TableRow
+            key={site.id}
+            className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+            onClick={() => router.visit(siteRoutes.show(site.id).url)}
+          >
+            <TableCell>{site.id}</TableCell>
+            <TableCell>{site.name}</TableCell>
+            <TableCell>{site.domain}</TableCell>
+            <TableCell>{site.site_key}</TableCell>
+            <TableCell>{formatDate(site.created_at)}</TableCell>
+          </TableRow>
+        ))}
       </TableHeader>
     </Table>
   );

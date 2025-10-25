@@ -1,6 +1,15 @@
 import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 
+export interface Site {
+  id: number;
+  name: string;
+  domain: string;
+  site_key: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Auth {
   user: User;
 }
