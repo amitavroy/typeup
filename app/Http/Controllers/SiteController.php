@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Actions\SiteCreate;
+use App\Actions\SiteUpdate;
 use App\Http\Requests\SiteCreateRequest;
+use App\Http\Requests\SiteUpdateRequest;
 use App\Models\Site;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -56,9 +58,11 @@ class SiteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(string $id)
+    public function update(SiteUpdateRequest $request, Site $site, SiteUpdate $siteUpdate)
     {
-        //
+        $siteUpdate->execute($site, $request->validated());
+
+        return redirect()->route('sites.show', $site->id);
     }
 
     /**

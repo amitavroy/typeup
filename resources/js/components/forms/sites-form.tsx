@@ -99,17 +99,19 @@ export default function SiteForm({ site }: { site: Site }) {
 
             {/* Submit Button */}
             <div className="flex justify-between gap-2">
-              <ConfirmDialog
-                title="Delete Site"
-                description="Are you sure you want to delete this site?"
-                confirmButtonText="Delete"
-                trigger={
-                  <Button variant="destructive" type="button">
-                    Delete
-                  </Button>
-                }
-                onConfirm={handleDelete}
-              />
+              {isEdit && (
+                <ConfirmDialog
+                  title="Delete Site"
+                  description="Are you sure you want to delete this site?"
+                  confirmButtonText="Delete"
+                  trigger={
+                    <Button variant="destructive" type="button">
+                      Delete
+                    </Button>
+                  }
+                  onConfirm={handleDelete}
+                />
+              )}
               <Button type="submit" disabled={processing}>
                 {processing ? 'Saving...' : isEdit ? 'Save Site' : 'Add Site'}
               </Button>

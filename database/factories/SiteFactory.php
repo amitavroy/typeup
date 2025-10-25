@@ -19,7 +19,7 @@ class SiteFactory extends Factory
     {
         return [
             'name' => fake()->company(),
-            'domain' => fake()->unique()->domainName(),
+            'domain' => 'https://'.fake()->unique()->domainName(),
             'site_key' => Str::uuid()->toString(),
         ];
     }
